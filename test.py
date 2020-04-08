@@ -13,6 +13,7 @@ jinja_template = env.get_template('template.html')
 county_data = pd.read_csv('covid_confirmed_usafacts.csv')
 state_data = county_data.groupby(['State','stateFIPS']).sum()
 state_data = pd.DataFrame(state_data.to_records())
+state_data_long = pd.melt(state_data.drop(['countyFIPS'],axis=1), id_vars=['State','stateFIPS'],var_name='Date',value_name='numberOfConfirmed')
 source = alt.topo_feature(data.world_110m.url, 'countries')
 counties = alt.topo_feature(data.us_10m.url, feature='counties')
 states_data = alt.topo_feature(data.us_10m.url, feature='states')
@@ -24,7 +25,10 @@ state_list = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA",
                  "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", 
                  "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", 
                  "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"]
+scale_list = ["linear","log"]
 states = pn.widgets.Select(options=state_list, name='Select state',value="NY")
+
+scales = pn.widgets.ToggleGroup(options=scale_list, name='Select scale',behavior='radio',value="linear")
 
 date_slider_state = pn.widgets.DateSlider(name='Date', start=dt.datetime(2020, 3, 3), end=dt.datetime(2020, 4, 3), value=dt.datetime(2020, 4, 3))
 
@@ -45,7 +49,7 @@ def get_state_map(states, date_slider_state):
                  "SD":46, "TN":47, "TX":48, "UT":49, "VT":50, "VA":51, "WA":53, "WV":54, "WI":55, "WY":56}
   state = state_dict[states]
   date = date_slider_state.strftime('%-m/%-d/%y')
-  return alt.Chart(counties).mark_geoshape(
+  a = alt.Chart(counties).mark_geoshape(
     stroke='black'
   ).transform_calculate(
     state_id = "(datum.id / 1000)|0"
@@ -62,8 +66,36 @@ def get_state_map(states, date_slider_state):
     height=450
   ).project(
     type='albersUsa'
-  ).configure_view(stroke=None)
+  )
+  return a.configure_view(
+    stroke=None
+  )
 
+@pn.depends(date_slider_country.param.value)
+def get_country_bar(date_slider_country):
+  date = date_slider_country.strftime('%-m/%-d/%y')
+  return alt.Chart(state_data).mark_bar().encode(
+      x=alt.X('State',sort='-y'),
+      y=alt.Y(date+':Q',title='Number of Confirmed')
+  )
+
+@pn.depends(date_slider_country.param.value)
+def get_country_table(date_slider_country):
+  date = date_slider_country.strftime('%-m/%-d/%y')
+  state_table = state_data[['State',date]].sort_values(by=date, ascending=False).reset_index(drop=True)[:10]
+  state_table.index = state_table.index + 1
+  return state_table
+
+@pn.depends(states.param.value, scales.param.value)
+def get_state_line(states, scales):
+  return alt.Chart(state_data_long).mark_line().encode(
+    alt.X('Date:T'),
+    alt.Y('numberOfConfirmed:Q', scale=alt.Scale(type=scales))
+  ).transform_filter(
+      (alt.datum.State == states)
+  ).transform_filter(
+      alt.datum.numberOfConfirmed > 0  
+  )
 
 # US map
 @pn.depends(date_slider_country.param.value)
@@ -98,12 +130,24 @@ tmpl.add_variable('app_title', '<h1>COVID-19 in U.S. States</h1>')
 
 state_map = pn.Row(
     pn.Column('# Covid-19 for each state in the U.S.', pn.panel(covid_logo, height=150), states, date_slider_state),
-    get_state_map
+    pn.Tabs(
+      ('Map', get_state_map),
+      ('Line Chart', pn.Column(get_state_line, scales))
+    )
 )
+
+# state_line = pn.Column(
+#     get_state_line,
+#     scales
+# )
 
 us_map = pn.Row(
     pn.Column('# Covid-19 in the U.S.',pn.panel(covid_logo, height=150), date_slider_country),
-    get_country_map
+    pn.Tabs(
+      ('Map', get_country_map),
+      ('Bar Chart', get_country_bar),
+      ('10 states with the most COVID-19 cases', get_country_table)
+    )
 )
 
 # A.save('index.html', embed=True, max_states=2000, max_opts=2000)
@@ -112,6 +156,8 @@ us_map = pn.Row(
 # tmpl.add_panel('B', get_map)
 tmpl.add_panel('A', us_map)
 tmpl.add_panel('B', state_map)
+# tmpl.add_panel('C', state_line)
+
 # tmpl.save('index.html', embed=True)
 tmpl.servable()
 # Run "panel serve --show test.py" to start a local server and view it in your browser
