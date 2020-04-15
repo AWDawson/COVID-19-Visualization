@@ -84,17 +84,60 @@ def get_country_table(date_slider_country):
   date = date_slider_country.strftime('%-m/%-d/%y')
   state_table = state_data[['State',date]].sort_values(by=date, ascending=False).reset_index(drop=True)[:10]
   state_table.index = state_table.index + 1
+  td_props = [
+    ('font-size', '18px')
+  ]
+  styles = [
+    dict(selector="th", props=td_props),
+    dict(selector="td", props=td_props)
+  ]
+
+  # state_table = state_table.style.set_table_styles(styles)
+
   return state_table
 
-@pn.depends(states.param.value, scales.param.value)
-def get_state_line(states, scales):
-  return alt.Chart(state_data_long).mark_line().encode(
-    alt.X('Date:T'),
-    alt.Y('numberOfConfirmed:Q', scale=alt.Scale(type=scales))
+@pn.depends(states.param.value, scales.param.value, date_slider_state.param.value)
+def get_state_line(states, scales, date_slider_state):
+  date = date_slider_state.strftime('%-m/%-d/%y')
+  state_data_long['rule'] = date
+  state_data_long['num'] = int(state_data.loc[state_data['State'] == states,date])
+
+  # print(date)
+  base = alt.Chart(
+    state_data_long
   ).transform_filter(
       (alt.datum.State == states)
   ).transform_filter(
-      alt.datum.numberOfConfirmed > 0  
+      alt.datum.numberOfConfirmed > 0
+  )
+
+  line = base.mark_line().encode(
+    alt.X('Date:T',title="Date"),
+    alt.Y('numberOfConfirmed:Q', scale=alt.Scale(type=scales), title="Number of Confirmed Cases")
+  )
+
+  dots = base.mark_point(
+    filled=True,
+    size = 100,
+    color = 'black'
+  ).encode(
+      x = 'rule:T',
+      y = 'num:Q',
+      tooltip=[alt.Tooltip('num:Q', title='Number of Cases'),alt.Tooltip("rule:T", title='Date')]
+  )
+
+  rule = base.mark_rule(
+    size=4, 
+    color="lightgray"
+  ).encode(
+    x = 'rule:T'
+  )
+
+  return (rule+line+dots).properties(
+    height=350,
+    width=450
+  ).configure_axis(
+    titleFontSize=16
   )
 
 # US map
@@ -130,10 +173,13 @@ tmpl.add_variable('app_title', '<h1>COVID-19 in U.S. States</h1>')
 
 state_map = pn.Row(
     pn.Column('# Covid-19 for each state in the U.S.', pn.panel(covid_logo, height=150), states, date_slider_state),
-    pn.Tabs(
-      ('Map', get_state_map),
-      ('Line Chart', pn.Column(get_state_line, scales))
-    )
+    pn.Column(get_state_map, width=700),
+    pn.Column(get_state_line,pn.Spacer(height=60),scales),
+
+    # pn.Tabs(
+    #   ('Map', get_state_map),
+    #   ('Line Chart', pn.Column(get_state_line, scales))
+    # )
 )
 
 # state_line = pn.Column(
@@ -141,13 +187,18 @@ state_map = pn.Row(
 #     scales
 # )
 
+
+
+
 us_map = pn.Row(
     pn.Column('# Covid-19 in the U.S.',pn.panel(covid_logo, height=150), date_slider_country),
-    pn.Tabs(
-      ('Map', get_country_map),
-      ('Bar Chart', get_country_bar),
-      ('10 states with the most COVID-19 cases', get_country_table)
-    )
+    pn.Column(get_country_map,width=700),
+    pn.Column(get_country_table)
+    # pn.Tabs(
+    #   ('Map', get_country_map),
+    #   ('Bar Chart', get_country_bar),
+    #   ('10 states with the most COVID-19 cases', get_country_table)
+    # )
 )
 
 # A.save('index.html', embed=True, max_states=2000, max_opts=2000)
