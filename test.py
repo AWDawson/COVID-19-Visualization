@@ -10,7 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 env = Environment(loader=FileSystemLoader('.'))
 jinja_template = env.get_template('template.html')
 
-county_data = pd.read_csv('covid_confirmed_usafacts.csv')
+county_data = pd.read_csv('covid_confirmed_usafacts_new.csv')
 state_data = county_data.groupby(['State','stateFIPS']).sum()
 state_data = pd.DataFrame(state_data.to_records())
 state_data_long = pd.melt(state_data.drop(['countyFIPS'],axis=1), id_vars=['State','stateFIPS'],var_name='Date',value_name='numberOfConfirmed')
@@ -30,9 +30,9 @@ states = pn.widgets.Select(options=state_list, name='Select state',value="NY")
 
 scales = pn.widgets.ToggleGroup(options=scale_list, name='Select scale',behavior='radio',value="linear")
 
-date_slider_state = pn.widgets.DateSlider(name='Date', start=dt.datetime(2020, 3, 3), end=dt.datetime(2020, 4, 3), value=dt.datetime(2020, 4, 3))
+date_slider_state = pn.widgets.DateSlider(name='Date', start=dt.datetime(2020, 3, 3), end=dt.datetime(2020, 4, 17), value=dt.datetime(2020, 4, 17))
 
-date_slider_country = pn.widgets.DateSlider(name='Date', start=dt.datetime(2020, 3, 3), end=dt.datetime(2020, 4, 3), value=dt.datetime(2020, 4, 3))
+date_slider_country = pn.widgets.DateSlider(name='Date', start=dt.datetime(2020, 3, 3), end=dt.datetime(2020, 4, 17), value=dt.datetime(2020, 4, 17))
 
 
 altair_logo = 'https://altair-viz.github.io/_static/altair-logo-light.png'
@@ -135,7 +135,7 @@ def get_state_line(states, scales, date_slider_state):
 
   return (rule+line+dots).properties(
     height=350,
-    width=450
+    width=350
   ).configure_axis(
     titleFontSize=16
   )

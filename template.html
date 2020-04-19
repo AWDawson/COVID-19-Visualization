@@ -2,22 +2,175 @@
 
 <!-- goes in body -->
 {% block postamble %}
-<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
-<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <style>
+  .carousel-inner img {
+      width: 100%;
+      height: 100%;
+  }
+
+
+
+  body {
+  background-image: url('https://www.aljazeera.com/mritems/Images/2020/3/31/e38d323124574618bce4659eda82b77b_8.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+  </style>
 {% endblock %}
 
 <!-- goes in body -->
 {% block contents %}
-{{ app_title }}
-<p class="abc">This is a visualization that shows the COVID-19 situation in the U.S.</p>
-<br>
-<div class="container">
-  <div class="row" style="height:600px">
-    {{embed(roots.A)}}
-  </div>
-  <div class="row">
-    {{embed(roots.B)}}
-  </div>
 
+<section>
+<h1 style="font-weight: bold;">
+<center>
+<font color="Black">COVID-19 in U.S.</font>
+</center>
+</h1 style="font-weight: bold;">
+</section>
+
+<div id="ss" class="btn-group" role="group" aria-label="Basic example" style="width: 100%">
+  <a href="#demo" class="btn btn-primary">Introduction</a>
+  <a href="#hh" class="btn btn-primary">Analysis</a>
+  <a href="#cc" class="btn btn-primary">Conclusion</a>
 </div>
+<HR color=#987cb9 SIZE=1>
+
+<section>
+	<div id="demo" class="carousel slide" data-ride="carousel">
+
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+  </ul>
+ 
+  
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="https://www.cdc.gov/media/dpk/diseases-and-conditions/coronavirus/images/outbreak-coronavirus-world-1024x506px.jpg" style="width:1700px; height: 900px;">
+      <div class="carousel-caption">
+        <p style="font-weight: bold;"><font size="+4" color="Yellow">COVID-19 (Novel Coronavirus)</font></p style="font-weight: bold;">
+        <p style="font-weight: bold;"><font size="+2" color="Yellow">Coronaviruses are a large family of viruses known to cause colds and more serious diseases such as Middle East Respiratory Syndrome (MERS) and Severe Acute Respiratory Syndrome (SARS). The new coronavirus is a new strain of coronavirus that has never been found in humans before.</font></p style="font-weight: bold;">
+        <a href="#ss" class="btn btn-primary">Go back to top</a>
+        <a href="#hh" class="btn btn-primary">Go to Analysis</a>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="https://image.cnbcfm.com/api/v1/image/106422555-1583259621140gettyimages-1210144923.jpeg?v=1583259693&w=740&h=416" style="width:1700px; height: 900px;">
+      <div class="carousel-caption">
+         <p style="font-weight: bold;"><font size="+4" color="Yellow">COVID-19 -- Highly contagious disease</font></p style="font-weight: bold;">
+        <p style="font-weight: bold;"><font size="+2" color="Yellow">Common signs of people infected with coronavirus include respiratory symptoms, fever, cough, shortness of breath, and difficulty breathing. In more severe cases, infection can lead to pneumonia, severe acute respiratory syndrome, kidney failure, and even death. 
+
+        There is currently no specific treatment for diseases caused by new coronaviruses. However, many symptoms can be managed, so it needs to be treated according to the patient's clinical situation.</font></p style="font-weight: bold;">
+        <a href="#ss" class="btn btn-primary">Go back to top</a>
+        <a href="#hh" class="btn btn-primary">Go to Analysis</a>
+      </div>
+      
+    </div>
+    <div class="carousel-item">
+      <img src="https://cdn.i-scmp.com/sites/default/files/d8/video/thumbnail/2020/04/07/nurses_protest_thumbnail_clean.jpg" style="width:1700px; height: 900px;">
+      <div class="carousel-caption">
+         <p style="font-weight: bold;"><font size="+4" color="Yellow">COVID-19 in U.S. -- worst in the world</font></p style="font-weight: bold;">
+        <p style="font-weight: bold;"><font size="+2" color="Yellow">The number of infected people in the United States has approached 700,000, and the total number of deaths has exceeded 30,000. Among them, the number of infected people in New York State alone has exceeded 220,000. The United States is now the country with the worst epidemic (COVID-19) in the world. The shortage of medical supplies is the most serious problem facing the United States.</font></p style="font-weight: bold;">
+        <a href="#ss" class="btn btn-primary">Go back to top</a>
+        <a href="#hh" class="btn btn-primary">Go to Analysis</a>
+      </div>
+    </div>
+  </div>
+ 
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+ 
+</div>
+</section>
+<HR color=#987cb9 SIZE=1>
+<section id="hh">
+	<div class="card-group">
+  <div class="card">
+    <img src="https://media.npr.org/assets/img/2020/01/29/wuhan-passenger-cheer-american_wide-ca9cefbb27b07e2672978bad03ad79aa0e7ee990-s1600-c85.jpg" alt="a" style="width:830px; height: 400px;">
+    <div class="card-body">
+      <h5 class="card-title">Covid-19 in the U.S.</h5>
+      <p class="card-text">Why is the epidemic in the United States so serious? We can analyze the time change of the infection situation across the country.</p>
+      <a href="#a1" class="btn btn-primary">Move to plot</a>
+    </div>
+  </div>
+  <div class="card">
+    <img src="https://i.insider.com/5e63de18fee23d7e5a6db662?width=2500&format=jpeg&auto=webp" class="card-img-top" alt="b" style="width:830px; height: 400px;">
+    <div class="card-body">
+      <h5 class="card-title">Covid-19 for each state in the U.S.</h5>
+      <p class="card-text">No snowflake is innocent during an avalanche. Based on the national conditions of the United States, we can study the current epidemic situation in the United States by analyzing the changes in the epidemic situation in each state over time.</p>
+      <a href="#a2" class="btn btn-primary">Move to plot</a>
+    </div>
+  </div>
+</div>
+</section>
+<HR color=#987cb9 SIZE=1>
+<section>
+	
+	<div id="a1" class="jumbotron">
+    <h1><center>Covid-19 in the U.S.</center></h1>
+    <p><center>Why is the epidemic in the United States so serious? We can analyze the time change of the infection situation across the country.</center></p>
+    <HR color=#987cb9 SIZE=1>
+<div id="p1" class="container">
+	<div class="row justify-content-md-center">
+
+    		<div class="row" style="height:600px">
+    			{{embed(roots.A)}}
+  			</div>
+  	</div>
+</div>
+	<p style="font-weight: bold;"><center><font size="+2" color="Black">
+
+Users can select the date they want to view by controlling the timeline on the left, so as to view the distribution of the overall US epidemic in the map at the specific date, and get the top few states in the epidemic from the right table.
+</font></center></p style="font-weight: bold;">
+<a href="#ss" class="btn btn-primary">Go back to top</a>
+<a href="#hh" class="btn btn-primary">Go back to analysis menu</a>
+<a href="#cc" class="btn btn-primary">Move to conclusion</a>
+</div>
+
+
+
+<HR color=#987cb9 SIZE=1>
+<div id="a2" class="jumbotron">
+  <h1><center>Covid-19 for each state in the U.S.</center></h1>
+    <p><center>No snowflake is innocent during an avalanche. Based on the national conditions of the United States, we can study the current epidemic situation in the United States by analyzing the changes in the epidemic situation in each state over time.</center></p>
+    <HR color=#987cb9 SIZE=1>
+<div id="p2" class="container">
+	<div class="row justify-content-md-center">
+    		<div class="row" style="height:600px">
+    			{{embed(roots.B)}}
+  			</div>
+  		</div>
+</div>
+<p style="font-weight: bold;"><center><font size="+2" color="Black">
+
+Users can select the date they want to view by controlling the timeline and select the state they want to view from the dropdown menu on the left, so as to view the distribution of the overall US epidemic in the map at the specific date of the selected state, and obtain a trend graph of the epidemic situation over time in the selected state in either regular linear form or log form from the right picture.
+</font></center></p style="font-weight: bold;">
+<a href="#ss" class="btn btn-primary">Go back to top</a>
+<a href="#hh" class="btn btn-primary">Go back to analysis menu</a>
+<a href="#cc" class="btn btn-primary">Move to conclusion</a>
+</div>
+</section>
+<HR color=#987cb9 SIZE=1>
+<section id="cc">
+	<div class="jumbotron">
+		<h1><center>Conclusion</center></h1>
+		<HR color=#987cb9 SIZE=1>
+		<p style="font-weight: bold;"><center><font size="+2" color="Black">We endeavor to achieve effectiveness (answer the main domain questions), Perceptuality (graphical excellence to create best meaningful visualization) and design principles (aligning visualization with optimal lie factor). Our visualization depicts that COVID-19 is spreading in the US rapidly and about to reach its peak. Our state level visualization spread the users to view the data at a more granular level. Maps like this can be helpful, as they can help you track where the virus has spread - and perhaps more importantly, where it hasn't spread.</font></center></p style="font-weight: bold;">
+		<a href="#ss" class="btn btn-primary">Go back to top</a>
+	
+</div>
+</section>
+
 {% endblock %}
