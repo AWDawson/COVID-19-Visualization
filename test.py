@@ -69,6 +69,8 @@ def get_state_map(states, date_slider_state):
   )
   return a.configure_view(
     stroke=None
+  ).configure(background='#e9ecef').configure_view(
+      strokeWidth=0
   )
 
 @pn.depends(date_slider_country.param.value)
@@ -138,7 +140,7 @@ def get_state_line(states, scales, date_slider_state):
     width=350
   ).configure_axis(
     titleFontSize=16
-  )
+  ).configure(background='#e9ecef')
 
 # US map
 @pn.depends(date_slider_country.param.value)
@@ -157,7 +159,9 @@ def get_country_map(date_slider_country):
         height=450
     ).project(
         type='albersUsa'
-    ).configure_view(stroke=None)
+    ).configure_view(stroke=None).configure(background='#e9ecef').configure_view(
+      strokeWidth=0
+    )
 
 # Customize webpage
 
